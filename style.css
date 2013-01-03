@@ -1,6 +1,7 @@
 body {
   background-color: #a0a050;
   font-size: 150%;
+  font-family: "Comic Sans MS";
 }
 
 h1 {
@@ -11,8 +12,8 @@ div, canvas {
   text-align: center;
 }
 
-div {
-  width: 24%;
+div.lateral {
+  width: 25%;
 }
 div#stats {
   float: right;
@@ -22,5 +23,5 @@ div#instructions {
 }
 
 canvas {
-  width: 50%;
+  width: 49%;
 }

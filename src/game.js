@@ -47,7 +47,7 @@ function Game() {
   }
 
   this.update = function() {
-    if (player.lives == 0) jaws.switchGameState(Menu);
+    if (player.lives == 0) jaws.switchGameState(Outro);
     if (enemies.length <= 0) {
       lvl++;
       for (var i = 0; i < lvl; i++) {

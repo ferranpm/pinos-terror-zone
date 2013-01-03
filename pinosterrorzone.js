@@ -84,6 +84,19 @@ function Player(options) {
   }
 }
 Player.prototype = jaws.Sprite.prototype;
+function Outro() {
+  var background;
+  this.setup = function() {
+    background = document.createElement('img');
+    background.src = 'img/background_outro.png';
+  }
+  this.update = function() {
+    if (jaws.pressed('enter')) jaws.switchGameState(Menu);
+  }
+  this.draw = function() {
+    jaws.context.drawImage(background, 0, 0);
+  }
+}
 function Menu() {
   var background; 
   var anim;
@@ -175,7 +188,7 @@ function Game() {
   }
 
   this.update = function() {
-    if (player.lives == 0) jaws.switchGameState(Menu);
+    if (player.lives == 0) jaws.switchGameState(Outro);
     if (enemies.length <= 0) {
       lvl++;
       for (var i = 0; i < lvl; i++) {

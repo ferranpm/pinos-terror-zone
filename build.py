@@ -2,6 +2,7 @@ list = [
     'src/bullet.js',
     'src/enemy.js',
     'src/player.js',
+    'src/outro.js',
     'src/menu.js',
     'src/game.js',
     'src/main.js']
