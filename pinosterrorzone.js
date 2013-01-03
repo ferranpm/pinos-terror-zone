@@ -166,6 +166,7 @@ function Game() {
   }
 
   this.newBullet = function(dir) {
+    document.getElementById('shot').innerHTML='<embed src="snd/shot.wav" hidden=true autostart=true loop=false>';
     bullets.push(new Bullet([player.x+15, player.y+60], dir));
   }
 
@@ -231,7 +232,10 @@ function Game() {
     }
 
     var comidita = jaws.collideOneWithMany(player, ramens);
+    var primer = true;
     for (var i = 0; i < comidita.length; i++) {
+      if (primer)
+        document.getElementById('nom').innerHTML='<embed src="snd/nom.wav" hidden=true autostart=true loop=false>';
       player.eat();
       player.lives++;
       var index = ramens.indexOf(comidita[i]);
