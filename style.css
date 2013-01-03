@@ -8,9 +8,7 @@ h1 {
 }
 
 div, canvas {
-//  border-width: 5px;
-//  border-style: solid;
-//  border-color: #0000ff;
+  text-align: center;
 }
 
 div {
