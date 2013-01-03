@@ -44,7 +44,7 @@ function Game() {
   var player;
   var player_eating;
   var player_vel = 8;
-  var player_lives = 10;
+  var player_lives = 3;
   var player_touched_count;
   var enemies;
   var enemies_count = 0;
@@ -103,7 +103,6 @@ function Game() {
 
   this.setup = function() {
     player = new jaws.Sprite({image: pino, x: 500, y: 250});
-    player_lives = 10;
 
     enemies = new Array();
 
