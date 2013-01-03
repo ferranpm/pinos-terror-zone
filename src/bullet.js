@@ -9,7 +9,9 @@ function Bullet(pos, dir) {
     case 'up': this.vel_y = -this.vel; break;
     case 'down': this.vel_y = this.vel; break;
   }
+
+  this.update = function() {
+      this.move(this.vel_x, this.vel_y);
+  }
 }
 Bullet.prototype = jaws.Sprite.prototype;
-
-

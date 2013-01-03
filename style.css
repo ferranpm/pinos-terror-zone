@@ -7,26 +7,22 @@ h1 {
   text-align: center;
 }
 
-div {
-  display: inline;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #0000ff;
-  padding: 2em;
-  width: 10%;
+div, canvas {
+//  border-width: 5px;
+//  border-style: solid;
+//  border-color: #0000ff;
 }
 
+div {
+  width: 24%;
+}
 div#stats {
   float: right;
 }
-
 div#instructions {
   float: left;
 }
 
 canvas {
-  display: inline;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #0000ff;
+  width: 50%;
 }

@@ -8,7 +8,19 @@ function Enemy(pos) {
   }
   jaws.Sprite.call(this, {image: this.randomImage(), x: pos[0], y: pos[1]});
   this.vel = 2;
+
+  this.update = function(player, others) {
+    if (player.x < this.x) this.move(-this.vel, 0);
+    if (jaws.collideOneWithMany(this, others).length != 0) this.move(this.vel*2, 0);
+    if (player.x > this.x) this.move(this.vel, 0);
+    if (jaws.collideOneWithMany(this, others).length != 0) this.move(-this.vel*2, 0);
+    if (player.y < this.y) this.move(0, -this.vel);
+    if (jaws.collideOneWithMany(this, others).length != 0) this.move(0, this.vel*2);
+    if (player.y > this.y) this.move(0, this.vel);
+    if (jaws.collideOneWithMany(this, others).length != 0) this.move(0, -this.vel*2);
+
+    if (jaws.collideOneWithOne(player, this))
+      player.touched();
+  }
 }
 Enemy.prototype = jaws.Sprite.prototype;
-
-

@@ -1,12 +1,12 @@
 function Game() {
-  var background;
   var player;
   var enemies;
   var bullets;
-  var lvl = 0;
   var ramens;
-  var pressed;
+  var background;
+  var lvl = 0;
   var espai = 150;
+  var pressed = {i:0,j:0,k:0,l:0}; 
 
   this.randomEnemyPosition = function() {
     var rx = Math.round(Math.random()*800);
@@ -25,29 +25,24 @@ function Game() {
   }
 
   this.newBullet = function(dir) {
-    bullets.push(new Bullet([player.x+32, player.y+60], dir));
+    bullets.push(new Bullet([player.x+15, player.y+60], dir));
   }
 
   this.updateStats = function() {
     var lives = document.getElementById('lives');
-    lives.innerHTML = ': ' + player.lives;
+    lives.innerHTML = player.lives;
     var level = document.getElementById('level');
-    level.innerHTML = ': ' + lvl;
+    level.innerHTML = lvl;
+    var enemics = document.getElementById('enemies');
+    enemics.innerHTML = enemies.length;
   }
 
   this.setup = function() {
     player = new Player();
-
     enemies = new Array();
-
     bullets = new Array();
-
     ramens = new Array();
-
-    pressed = {i:0,j:0,k:0,l:0};
-
     background = document.createElement('img');
-
     this.updateStats();
   }
 
@@ -63,38 +58,21 @@ function Game() {
         var position = this.randomEnemyPosition();
         ramens.push(new jaws.Sprite({image: "img/ramen.png", x: position[0], y: position[1]}));
       }
-      switch (lvl%4) {
+      switch (lvl%5) {
         case 0: background.src = 'img/pisa.png'; break;
         case 1: background.src = 'img/eiffel.png'; break;
         case 2: background.src = 'img/coliseo.png'; break;
         case 3: background.src = 'img/canada.png'; break;
+        case 4: background.src = 'img/delacroix.png'; break;
       }
     }
 
-    player.setImage('img/pino.png');
     for (var i = 0; i < enemies.length; i++) {
-      if (player.x < enemies[i].x) enemies[i].move(-enemies[i].vel, 0);
-      if (jaws.collideOneWithMany(enemies[i], enemies).length != 0) enemies[i].move(enemies[i].vel*2, 0);
-      if (player.x > enemies[i].x) enemies[i].move(enemies[i].vel, 0);
-      if (jaws.collideOneWithMany(enemies[i], enemies).length != 0) enemies[i].move(-enemies[i].vel*2, 0);
-      if (player.y < enemies[i].y) enemies[i].move(0, -enemies[i].vel);
-      if (jaws.collideOneWithMany(enemies[i], enemies).length != 0) enemies[i].move(0, enemies[i].vel*2);
-      if (player.y > enemies[i].y) enemies[i].move(0, enemies[i].vel);
-      if (jaws.collideOneWithMany(enemies[i], enemies).length != 0) enemies[i].move(0, -enemies[i].vel*2);
-
-      if (jaws.collideOneWithOne(player, enemies[i])) {
-        player.setImage('img/pino_omg.png');
-        if (!player.touched && player.lives > 0) { 
-          player.lives--;
-          player.touched = 60;
-        }
-      }
+      enemies[i].update(player, enemies);
     }
-
-    if (player.touched > 0) player.touched--;
 
     for (var i = 0; i < bullets.length; i++) {
-      bullets[i].move(bullets[i].vel_x, bullets[i].vel_y);
+      bullets[i].update();
       if (bullets[i].x > 800 || bullets[i].y > 600) { //BORRAR BULLET;
         var index = bullets.indexOf(bullets[i]);
         bullets.splice(index,1);
@@ -112,25 +90,14 @@ function Game() {
     }
 
     var comidita = jaws.collideOneWithMany(player, ramens);
-    if (comidita.length > 0) {
-      player.setImage('img/pino_nom.png');
-    }
-    if (player.eating > 0) {
-      player.setImage('img/pino_nom.png');
-      player.eating--;
-    }
     for (var i = 0; i < comidita.length; i++) {
-      player.eating = 30;
+      player.eat();
       player.lives++;
       var index = ramens.indexOf(comidita[i]);
       ramens.splice(index, 1);
     }
 
-    if (jaws.pressed('w') && player.y > 0) player.move(0,-player.vel);
-    if (jaws.pressed('s') && player.y < 600-80) player.move(0,player.vel);
-    if (jaws.pressed('a') && player.x > 0) player.move(-player.vel,0);
-    if (jaws.pressed('d') && player.x < 800-64) player.move(player.vel,0);
-
+    player.update();
     if (jaws.pressed('j')) {
       if (!pressed.j) {
         this.newBullet('left');

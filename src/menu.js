@@ -3,6 +3,7 @@ function Menu() {
   var anim;
   var jugar;
   var count;
+  var frames = 30;
   var pos;
 
   this.randomButtonPos = function() {
@@ -24,12 +25,13 @@ function Menu() {
 
   this.update = function() {
     count++;
-    if (count > 30) {
+    if (count > frames) {
       jugar.src = 'img/jugar1.png';
       pos = this.randomButtonPos();
       count = 0;
     }
-    if (count > 15) jugar.src = 'img/jugar2.png';
+    if (count > frames/2) 
+      jugar.src = 'img/jugar2.png';
     if (jaws.pressed('enter')) jaws.switchGameState(Game);
   }
 
@@ -38,4 +40,3 @@ function Menu() {
     jaws.context.drawImage(jugar, pos[0], pos[1]);
   }
 }
-

@@ -9,10 +9,12 @@ function Bullet(pos, dir) {
     case 'up': this.vel_y = -this.vel; break;
     case 'down': this.vel_y = this.vel; break;
   }
+
+  this.update = function() {
+      this.move(this.vel_x, this.vel_y);
+  }
 }
 Bullet.prototype = jaws.Sprite.prototype;
-
-
 function Enemy(pos) {
   this.randomImage = function() {
     switch (Math.round(Math.random()*100)%3) {
@@ -23,36 +25,71 @@ function Enemy(pos) {
   }
   jaws.Sprite.call(this, {image: this.randomImage(), x: pos[0], y: pos[1]});
   this.vel = 2;
+
+  this.update = function(player, others) {
+    if (player.x < this.x) this.move(-this.vel, 0);
+    if (jaws.collideOneWithMany(this, others).length != 0) this.move(this.vel*2, 0);
+    if (player.x > this.x) this.move(this.vel, 0);
+    if (jaws.collideOneWithMany(this, others).length != 0) this.move(-this.vel*2, 0);
+    if (player.y < this.y) this.move(0, -this.vel);
+    if (jaws.collideOneWithMany(this, others).length != 0) this.move(0, this.vel*2);
+    if (player.y > this.y) this.move(0, this.vel);
+    if (jaws.collideOneWithMany(this, others).length != 0) this.move(0, -this.vel*2);
+
+    if (jaws.collideOneWithOne(player, this))
+      player.touched();
+  }
 }
 Enemy.prototype = jaws.Sprite.prototype;
-
-
 function Player(options) {
   jaws.Sprite.call(this, {image: 'img/pino.png', x: 500, y: 250});
   this.images = [
     'img/pino.png',
     'img/pino_omg.png',
     'img/pino_nom.png'];
+  this.bullets = new Array();
   this.lives = 3;
-  this.touched = 0;
+  this.is_touched = 0;
+  this.is_eating = 0;
   this.state = 0;
   this.vel = 8;
-  this.eating = 0;
 
-  this.normal = function() { this.setImage(this.images[0]); }
-  this.eat = function() { this.setImage(this.images[1]); }
-  this.omg = function() { this.setImage(this.images[2]); }
+  this.touched = function() {
+    if (!this.is_touched) {
+      this.lives--;
+      this.is_touched = 60;
+    }
+  }
+
+  this.eat = function() {
+    if (!this.is_eating) {
+      this.is_eating = 30;
+    }
+  }
 
   this.update = function() {
+    if (this.is_eating > 0) {
+      this.setImage(this.images[2]);
+      this.is_eating--;
+    }
+    else if (this.is_touched > 0) {
+      this.setImage(this.images[1]);
+      this.is_touched--;
+    }
+    else this.setImage(this.images[0]);
+    if (jaws.pressed('w') && this.y > 0) this.move(0,-this.vel);
+    if (jaws.pressed('s') && this.y < 600-80) this.move(0,this.vel);
+    if (jaws.pressed('a') && this.x > 0) this.move(-this.vel,0);
+    if (jaws.pressed('d') && this.x < 800-64) this.move(this.vel,0);
   }
 }
 Player.prototype = jaws.Sprite.prototype;
-
 function Menu() {
   var background; 
   var anim;
   var jugar;
   var count;
+  var frames = 30;
   var pos;
 
   this.randomButtonPos = function() {
@@ -74,12 +111,13 @@ function Menu() {
 
   this.update = function() {
     count++;
-    if (count > 30) {
+    if (count > frames) {
       jugar.src = 'img/jugar1.png';
       pos = this.randomButtonPos();
       count = 0;
     }
-    if (count > 15) jugar.src = 'img/jugar2.png';
+    if (count > frames/2) 
+      jugar.src = 'img/jugar2.png';
     if (jaws.pressed('enter')) jaws.switchGameState(Game);
   }
 
@@ -88,16 +126,15 @@ function Menu() {
     jaws.context.drawImage(jugar, pos[0], pos[1]);
   }
 }
-
 function Game() {
-  var background;
   var player;
   var enemies;
   var bullets;
-  var lvl = 0;
   var ramens;
-  var pressed;
+  var background;
+  var lvl = 0;
   var espai = 150;
+  var pressed = {i:0,j:0,k:0,l:0}; 
 
   this.randomEnemyPosition = function() {
     var rx = Math.round(Math.random()*800);
@@ -116,29 +153,24 @@ function Game() {
   }
 
   this.newBullet = function(dir) {
-    bullets.push(new Bullet([player.x+32, player.y+60], dir));
+    bullets.push(new Bullet([player.x+15, player.y+60], dir));
   }
 
   this.updateStats = function() {
     var lives = document.getElementById('lives');
-    lives.innerHTML = ': ' + player.lives;
+    lives.innerHTML = player.lives;
     var level = document.getElementById('level');
-    level.innerHTML = ': ' + lvl;
+    level.innerHTML = lvl;
+    var enemics = document.getElementById('enemies');
+    enemics.innerHTML = enemies.length;
   }
 
   this.setup = function() {
     player = new Player();
-
     enemies = new Array();
-
     bullets = new Array();
-
     ramens = new Array();
-
-    pressed = {i:0,j:0,k:0,l:0};
-
     background = document.createElement('img');
-
     this.updateStats();
   }
 
@@ -154,38 +186,21 @@ function Game() {
         var position = this.randomEnemyPosition();
         ramens.push(new jaws.Sprite({image: "img/ramen.png", x: position[0], y: position[1]}));
       }
-      switch (lvl%4) {
+      switch (lvl%5) {
         case 0: background.src = 'img/pisa.png'; break;
         case 1: background.src = 'img/eiffel.png'; break;
         case 2: background.src = 'img/coliseo.png'; break;
         case 3: background.src = 'img/canada.png'; break;
+        case 4: background.src = 'img/delacroix.png'; break;
       }
     }
 
-    player.setImage('img/pino.png');
     for (var i = 0; i < enemies.length; i++) {
-      if (player.x < enemies[i].x) enemies[i].move(-enemies[i].vel, 0);
-      if (jaws.collideOneWithMany(enemies[i], enemies).length != 0) enemies[i].move(enemies[i].vel*2, 0);
-      if (player.x > enemies[i].x) enemies[i].move(enemies[i].vel, 0);
-      if (jaws.collideOneWithMany(enemies[i], enemies).length != 0) enemies[i].move(-enemies[i].vel*2, 0);
-      if (player.y < enemies[i].y) enemies[i].move(0, -enemies[i].vel);
-      if (jaws.collideOneWithMany(enemies[i], enemies).length != 0) enemies[i].move(0, enemies[i].vel*2);
-      if (player.y > enemies[i].y) enemies[i].move(0, enemies[i].vel);
-      if (jaws.collideOneWithMany(enemies[i], enemies).length != 0) enemies[i].move(0, -enemies[i].vel*2);
-
-      if (jaws.collideOneWithOne(player, enemies[i])) {
-        player.setImage('img/pino_omg.png');
-        if (!player.touched && player.lives > 0) { 
-          player.lives--;
-          player.touched = 60;
-        }
-      }
+      enemies[i].update(player, enemies);
     }
-
-    if (player.touched > 0) player.touched--;
 
     for (var i = 0; i < bullets.length; i++) {
-      bullets[i].move(bullets[i].vel_x, bullets[i].vel_y);
+      bullets[i].update();
       if (bullets[i].x > 800 || bullets[i].y > 600) { //BORRAR BULLET;
         var index = bullets.indexOf(bullets[i]);
         bullets.splice(index,1);
@@ -203,25 +218,14 @@ function Game() {
     }
 
     var comidita = jaws.collideOneWithMany(player, ramens);
-    if (comidita.length > 0) {
-      player.setImage('img/pino_nom.png');
-    }
-    if (player.eating > 0) {
-      player.setImage('img/pino_nom.png');
-      player.eating--;
-    }
     for (var i = 0; i < comidita.length; i++) {
-      player.eating = 30;
+      player.eat();
       player.lives++;
       var index = ramens.indexOf(comidita[i]);
       ramens.splice(index, 1);
     }
 
-    if (jaws.pressed('w') && player.y > 0) player.move(0,-player.vel);
-    if (jaws.pressed('s') && player.y < 600-80) player.move(0,player.vel);
-    if (jaws.pressed('a') && player.x > 0) player.move(-player.vel,0);
-    if (jaws.pressed('d') && player.x < 800-64) player.move(player.vel,0);
-
+    player.update();
     if (jaws.pressed('j')) {
       if (!pressed.j) {
         this.newBullet('left');
@@ -264,4 +268,5 @@ function Game() {
     player.draw();
   }
 };
+jaws.preventDefaultKeys(['w', 'a', 's', 'd', 'i', 'j', 'k', 'l', 'enter']);
 jaws.start(Menu);
