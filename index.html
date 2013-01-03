@@ -3,12 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <title>Pino's Quest</title>
+    <title>Pino's Terror Zone!</title>
   </head>
   <body>
-    <h1>The Binding of Pino</h1>
+    <h1>Pino's Terror Zone!</h1>
+    <div id="instructions">
+      Controles: <br />
+      Enter para jugar!
+      wasd: moverse<br />
+      ijkl: disparar
+    </div>
     <canvas width="800" height="600"></canvas>
-    <div id="stats"></div>
+    <div id="stats">
+      <img src="img/heart.png" /><span id="lives"></span><br />
+      lvl: <span id="level"></span> 
+    </div>
     <script type="text/javascript" src="jaws.js"></script>
     <script type="text/javascript" src="game.js"></script>
   </body>

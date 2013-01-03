@@ -1,3 +1,33 @@
-#canvas {
-  margin-left:auto;
+body {
+  background-color: #a0a050;
+  font-size: 150%;
+}
+
+h1 {
+  text-align: center;
+}
+
+div {
+  display: inline;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #0000ff;
+  padding: 2em;
+  width: 10%;
+}
+
+div#stats {
+  float: right;
+}
+
+div#instructions {
+  float: left;
+}
+
+canvas {
+  display: inline;
+  margin-left: 15%;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #0000ff;
 }
