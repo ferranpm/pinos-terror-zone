@@ -12,6 +12,10 @@ function Menu() {
     return [x, y];
   }
 
+  this.toGame = function() {
+    jaws.switchGameState(Game);
+  }
+
   this.setup = function() {
     background = document.createElement('img');
     background.src = 'img/background_menu.png';
@@ -21,6 +25,8 @@ function Menu() {
 
     pos = this.randomButtonPos();
     count = 0;
+
+    jaws.on_keyup('enter', this.toGame);
   }
 
   this.update = function() {
@@ -32,7 +38,6 @@ function Menu() {
     }
     if (count > frames/2) 
       jugar.src = 'img/jugar2.png';
-    if (jaws.pressed('enter')) jaws.switchGameState(Game);
   }
 
   this.draw = function() {

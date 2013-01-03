@@ -12,3 +12,4 @@ for f in list:
   file = open(f, "r")
   for s in file.readlines():
     output.write(s,)
+  output.write('\n')

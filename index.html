@@ -8,18 +8,30 @@
   </head>
   <body>
     <h1>Pino's Terror Zone!</h1>
-    <div id="info">Pulsa enter para empezar a jugar!</div>
-    <div class="lateral" id="instructions">
-      Controles: <br />
-      WASD: moverse<br />
-      IJKL: disparar
-    </div>
-    <canvas width="800" height="600"></canvas>
-    <div class="lateral" id="stats">
-      <img src="img/heart.png" />: <span id="lives"></span><br />
-      lvl: <span id="level"></span><br /> 
-      enemigos: <span id="enemies"></span>
-    </div>
+    <span id="info">Pulsa enter para empezar a jugar!</span>
+    <table>
+      <tr>
+        <td>
+          <div id="instructions">
+            Controles: <br />
+            WASD: moverse<br />
+            IJKL: disparar
+          </div>
+        </td>
+        <td>
+          <div id="canvas_container">
+            <canvas width="800" height="600"></canvas>
+          </div>
+        </td>
+        <td>
+          <div id="stats">
+            <img src="img/heart.png" />: <span id="lives"></span><br />
+            lvl: <span id="level"></span><br /> 
+            enemigos: <span id="enemies"></span>
+          </div>
+        </td>
+      </tr>
+    </table>
     <script type="text/javascript" src="jaws.js"></script>
     <script type="text/javascript" src="pinosterrorzone.js"></script>
     <span id="shot"></span>

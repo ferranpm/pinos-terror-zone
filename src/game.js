@@ -9,8 +9,8 @@ function Game() {
   var pressed = {i:0,j:0,k:0,l:0}; 
 
   this.randomEnemyPosition = function() {
-    var rx = Math.round(Math.random()*800);
-    var ry = Math.round(Math.random()*600);
+    var rx = Math.round(Math.random()*(jaws.canvas.width-64));
+    var ry = Math.round(Math.random()*(jaws.canvas.height-64));
     var bound_x0 = player.x - espai;
     var bound_x1 = player.x + 64 + espai;
     var bound_y0 = player.y - espai;

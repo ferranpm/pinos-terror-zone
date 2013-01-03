@@ -11,7 +11,7 @@ function Bullet(pos, dir) {
   }
 
   this.update = function() {
-      this.move(this.vel_x, this.vel_y);
+    this.move(this.vel_x, this.vel_y);
   }
 }
 Bullet.prototype = jaws.Sprite.prototype;

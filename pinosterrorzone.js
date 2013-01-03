@@ -11,10 +11,11 @@ function Bullet(pos, dir) {
   }
 
   this.update = function() {
-      this.move(this.vel_x, this.vel_y);
+    this.move(this.vel_x, this.vel_y);
   }
 }
 Bullet.prototype = jaws.Sprite.prototype;
+
 function Enemy(pos) {
   this.randomImage = function() {
     switch (Math.round(Math.random()*100)%3) {
@@ -41,6 +42,7 @@ function Enemy(pos) {
   }
 }
 Enemy.prototype = jaws.Sprite.prototype;
+
 function Player(options) {
   jaws.Sprite.call(this, {image: 'img/pino.png', x: 500, y: 250});
   this.images = [
@@ -84,19 +86,28 @@ function Player(options) {
   }
 }
 Player.prototype = jaws.Sprite.prototype;
+
 function Outro() {
   var background;
+
+  this.toMenu = function() {
+    jaws.switchGameState(Menu);
+  }
+
   this.setup = function() {
     background = document.createElement('img');
     background.src = 'img/background_outro.png';
+    jaws.on_keyup('enter', this.toMenu);
   }
+
   this.update = function() {
-    if (jaws.pressed('enter')) jaws.switchGameState(Menu);
   }
+
   this.draw = function() {
     jaws.context.drawImage(background, 0, 0);
   }
 }
+
 function Menu() {
   var background; 
   var anim;
@@ -111,6 +122,10 @@ function Menu() {
     return [x, y];
   }
 
+  this.toGame = function() {
+    jaws.switchGameState(Game);
+  }
+
   this.setup = function() {
     background = document.createElement('img');
     background.src = 'img/background_menu.png';
@@ -120,6 +135,8 @@ function Menu() {
 
     pos = this.randomButtonPos();
     count = 0;
+
+    jaws.on_keyup('enter', this.toGame);
   }
 
   this.update = function() {
@@ -131,7 +148,6 @@ function Menu() {
     }
     if (count > frames/2) 
       jugar.src = 'img/jugar2.png';
-    if (jaws.pressed('enter')) jaws.switchGameState(Game);
   }
 
   this.draw = function() {
@@ -139,6 +155,7 @@ function Menu() {
     jaws.context.drawImage(jugar, pos[0], pos[1]);
   }
 }
+
 function Game() {
   var player;
   var enemies;
@@ -150,8 +167,8 @@ function Game() {
   var pressed = {i:0,j:0,k:0,l:0}; 
 
   this.randomEnemyPosition = function() {
-    var rx = Math.round(Math.random()*800);
-    var ry = Math.round(Math.random()*600);
+    var rx = Math.round(Math.random()*(jaws.canvas.width-64));
+    var ry = Math.round(Math.random()*(jaws.canvas.height-64));
     var bound_x0 = player.x - espai;
     var bound_x1 = player.x + 64 + espai;
     var bound_y0 = player.y - espai;
@@ -285,5 +302,7 @@ function Game() {
     player.draw();
   }
 };
+
 jaws.preventDefaultKeys(['w', 'a', 's', 'd', 'i', 'j', 'k', 'l', 'enter']);
 jaws.start(Menu);
+
