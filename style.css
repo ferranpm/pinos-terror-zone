@@ -26,7 +26,6 @@ div#instructions {
 
 canvas {
   display: inline;
-  margin-left: 15%;
   border-width: 5px;
   border-style: solid;
   border-color: #0000ff;
