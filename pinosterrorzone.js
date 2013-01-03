@@ -183,7 +183,9 @@ function Game() {
   }
 
   this.newBullet = function(dir) {
-    document.getElementById('shot').innerHTML='<embed src="snd/shot.wav" hidden=true autostart=true loop=false>';
+    var sound_active = document.getElementById('sound').checked;
+    if (sound_active)
+      new Audio('snd/shot.wav').play();
     bullets.push(new Bullet([player.x+15, player.y+60], dir));
   }
 
@@ -201,6 +203,8 @@ function Game() {
     enemies = new Array();
     bullets = new Array();
     ramens = new Array();
+    bullet_sounds = new Array();
+    nom_sounds = new Array();
     background = document.createElement('img');
     this.updateStats();
   }
@@ -249,10 +253,9 @@ function Game() {
     }
 
     var comidita = jaws.collideOneWithMany(player, ramens);
-    var primer = true;
     for (var i = 0; i < comidita.length; i++) {
-      if (primer)
-        document.getElementById('nom').innerHTML='<embed src="snd/nom.wav" hidden=true autostart=true loop=false>';
+      if (document.getElementById('sound').checked)
+        new Audio('snd/nom.wav').play();
       player.eat();
       player.lives++;
       var index = ramens.indexOf(comidita[i]);
