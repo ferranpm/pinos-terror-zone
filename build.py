@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 list = [
     'src/bullet.js',
     'src/enemy.js',

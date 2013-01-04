@@ -165,7 +165,7 @@ function Game() {
   var lvl = 0;
   var espai = 150;
   var pressed = {i:0,j:0,k:0,l:0}; 
-
+  
   this.randomEnemyPosition = function() {
     var rx = Math.round(Math.random()*(jaws.canvas.width-64));
     var ry = Math.round(Math.random()*(jaws.canvas.height-64));
@@ -173,18 +173,17 @@ function Game() {
     var bound_x1 = player.x + 64 + espai;
     var bound_y0 = player.y - espai;
     var bound_y1 = player.y + 90 + espai;
-    if (rx < bound_x0) return new Array(rx, ry);
-    else if (rx > bound_x1) return new Array(rx, ry);
+    if (rx < bound_x0) return [rx, ry];
+    else if (rx > bound_x1) return [rx, ry];
     else {
-      if (ry < bound_y0) return new Array(rx, ry);
-      else if (ry > bound_y1) return new Array(rx, ry);
+      if (ry < bound_y0) return [rx, ry];
+      else if (ry > bound_y1) return [rx, ry];
     }
     return this.randomEnemyPosition();
   }
 
   this.newBullet = function(dir) {
-    var sound_active = document.getElementById('sound').checked;
-    if (sound_active)
+    if (document.getElementById('sound').checked)
       new Audio('snd/shot.wav').play();
     bullets.push(new Bullet([player.x+15, player.y+60], dir));
   }
@@ -194,8 +193,6 @@ function Game() {
     lives.innerHTML = player.lives;
     var level = document.getElementById('level');
     level.innerHTML = lvl;
-    var enemics = document.getElementById('enemies');
-    enemics.innerHTML = enemies.length;
   }
 
   this.setup = function() {
@@ -203,14 +200,13 @@ function Game() {
     enemies = new Array();
     bullets = new Array();
     ramens = new Array();
-    bullet_sounds = new Array();
-    nom_sounds = new Array();
     background = document.createElement('img');
     this.updateStats();
   }
 
   this.update = function() {
     if (player.lives == 0) jaws.switchGameState(Outro);
+
     if (enemies.length <= 0) {
       lvl++;
       for (var i = 0; i < lvl; i++) {
@@ -230,19 +226,16 @@ function Game() {
       }
     }
 
-    for (var i = 0; i < enemies.length; i++) {
+    for (var i = 0; i < enemies.length; i++)
       enemies[i].update(player, enemies);
-    }
 
     for (var i = 0; i < bullets.length; i++) {
       bullets[i].update();
-      if (bullets[i].x > 800 || bullets[i].y > 600) { //BORRAR BULLET;
-        var index = bullets.indexOf(bullets[i]);
-        bullets.splice(index,1);
-      }
+      if (bullets[i].x < 0 || bullets[i].x > 800 || 
+          bullets[i].y < 0 ||  bullets[i].y > 600)
+        bullets.splice(i,1);
     }
 
-    var dead = jaws.collideManyWithMany(bullets, enemies);
     for (var i = 0; i < bullets.length; i++) {
       var collide = jaws.collideOneWithMany(bullets[i], enemies);
       if (collide.length > 0) {
