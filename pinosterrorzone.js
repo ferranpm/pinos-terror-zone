@@ -43,6 +43,69 @@ function Enemy(pos) {
 }
 Enemy.prototype = jaws.Sprite.prototype;
 
+function Bullets() {
+  var pressed = {i:0,j:0,k:0,l:0}; 
+  var bullets = new Array();
+
+  this.newBullet = function(pos, dir) {
+    if (document.getElementById('sound').checked)
+      new Audio('snd/shot.wav').play();
+    bullets.push(new Bullet([pos.x+15, pos.y+60], dir));
+  }
+
+  this.draw = function() {
+    for (var i = 0; i < bullets.length; i++) 
+      bullets[i].draw();
+  }
+
+  this.update = function(player, enemies) {
+    for (var i = 0; i < bullets.length; i++) {
+      bullets[i].update();
+      if (bullets[i].x < 0 || bullets[i].x > 800 || 
+          bullets[i].y < 0 ||  bullets[i].y > 600)
+        bullets.splice(i,1);
+    }
+
+    for (var i = 0; i < bullets.length; i++) {
+      var collide = jaws.collideOneWithMany(bullets[i], enemies);
+      if (collide.length > 0) {
+        var e_index = enemies.indexOf(collide[0]);
+        enemies.splice(e_index, 1);
+        bullets.splice(i, 1);
+      }
+    }
+
+    if (jaws.pressed('j')) {
+      if (!pressed.j) {
+        this.newBullet(player, 'left');
+        pressed.j = 1;
+      }
+    }
+    else pressed.j = 0;
+    if (jaws.pressed('i')) {
+      if (!pressed.i) {
+        this.newBullet(player, 'up');
+        pressed.i = 1;
+      }
+    }
+    else pressed.i = 0;
+    if (jaws.pressed('k')) {
+      if (!pressed.k) {
+        this.newBullet(player, 'down');
+        pressed.k = 1;
+      }
+    }
+    else pressed.k = 0;
+    if (jaws.pressed('l')) {
+      if (!pressed.l) {
+        this.newBullet(player, 'right');
+        pressed.l = 1;
+      }
+    }
+    else pressed.l = 0;
+  }
+}
+
 function Player(options) {
   jaws.Sprite.call(this, {image: 'img/pino.png', x: 500, y: 250});
   this.images = [
@@ -58,12 +121,17 @@ function Player(options) {
 
   this.touched = function() {
     if (!this.is_touched) {
+      if (document.getElementById('sound').checked)
+        new Audio('snd/au.wav').play();
       this.lives--;
       this.is_touched = 60;
     }
   }
 
   this.eat = function() {
+    this.lives++;
+    if (document.getElementById('sound').checked)
+      new Audio('snd/nom.wav').play();
     if (!this.is_eating) {
       this.is_eating = 30;
     }
@@ -162,11 +230,10 @@ function Game() {
   var bullets;
   var ramens;
   var background;
-  var lvl = 0;
-  var espai = 150;
-  var pressed = {i:0,j:0,k:0,l:0}; 
-  
-  this.randomEnemyPosition = function() {
+  var lvl;
+
+  this.randomPosition = function() {
+    var espai = 150;
     var rx = Math.round(Math.random()*(jaws.canvas.width-64));
     var ry = Math.round(Math.random()*(jaws.canvas.height-64));
     var bound_x0 = player.x - espai;
@@ -179,13 +246,7 @@ function Game() {
       if (ry < bound_y0) return [rx, ry];
       else if (ry > bound_y1) return [rx, ry];
     }
-    return this.randomEnemyPosition();
-  }
-
-  this.newBullet = function(dir) {
-    if (document.getElementById('sound').checked)
-      new Audio('snd/shot.wav').play();
-    bullets.push(new Bullet([player.x+15, player.y+60], dir));
+    return this.randomPosition();
   }
 
   this.updateStats = function() {
@@ -196,9 +257,10 @@ function Game() {
   }
 
   this.setup = function() {
+    lvl = 0;
     player = new Player();
+    bullets = new Bullets();
     enemies = new Array();
-    bullets = new Array();
     ramens = new Array();
     background = document.createElement('img');
     this.updateStats();
@@ -210,11 +272,11 @@ function Game() {
     if (enemies.length <= 0) {
       lvl++;
       for (var i = 0; i < lvl; i++) {
-        var position = this.randomEnemyPosition();
+        var position = this.randomPosition();
         enemies.push(new Enemy([position[0], position[1]]));
       }
       if (lvl%5 == 0) {
-        var position = this.randomEnemyPosition();
+        var position = this.randomPosition();
         ramens.push(new jaws.Sprite({image: "img/ramen.png", x: position[0], y: position[1]}));
       }
       switch (lvl%5) {
@@ -229,68 +291,21 @@ function Game() {
     for (var i = 0; i < enemies.length; i++)
       enemies[i].update(player, enemies);
 
-    for (var i = 0; i < bullets.length; i++) {
-      bullets[i].update();
-      if (bullets[i].x < 0 || bullets[i].x > 800 || 
-          bullets[i].y < 0 ||  bullets[i].y > 600)
-        bullets.splice(i,1);
-    }
-
-    for (var i = 0; i < bullets.length; i++) {
-      var collide = jaws.collideOneWithMany(bullets[i], enemies);
-      if (collide.length > 0) {
-        var e_index = enemies.indexOf(collide[0]);
-        enemies.splice(e_index, 1);
-        bullets.splice(i, 1);
-      }
-    }
-
-    var comidita = jaws.collideOneWithMany(player, ramens);
-    for (var i = 0; i < comidita.length; i++) {
-      if (document.getElementById('sound').checked)
-        new Audio('snd/nom.wav').play();
+    var comida = jaws.collideOneWithMany(player, ramens);
+    for (var i = 0; i < comida.length; i++) {
       player.eat();
-      player.lives++;
-      var index = ramens.indexOf(comidita[i]);
+      var index = ramens.indexOf(comida[i]);
       ramens.splice(index, 1);
     }
 
+    bullets.update(player, enemies);
     player.update();
-    if (jaws.pressed('j')) {
-      if (!pressed.j) {
-        this.newBullet('left');
-        pressed.j = 1;
-      }
-    }
-    else pressed.j = 0;
-    if (jaws.pressed('i')) {
-      if (!pressed.i) {
-        this.newBullet('up');
-        pressed.i = 1;
-      }
-    }
-    else pressed.i = 0;
-    if (jaws.pressed('k')) {
-      if (!pressed.k) {
-        this.newBullet('down');
-        pressed.k = 1;
-      }
-    }
-    else pressed.k = 0;
-    if (jaws.pressed('l')) {
-      if (!pressed.l) {
-        this.newBullet('right');
-        pressed.l = 1;
-      }
-    }
-    else pressed.l = 0;
     this.updateStats();
   }
 
   this.draw = function() {
     jaws.context.drawImage(background,0,0);
-    for (var i = 0; i < bullets.length; i++) 
-      bullets[i].draw();
+    bullets.draw();
     for (var i = 0; i < enemies.length; i++)
       enemies[i].draw();
     for (var i = 0; i < ramens.length; i++)

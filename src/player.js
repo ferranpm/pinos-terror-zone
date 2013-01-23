@@ -13,12 +13,17 @@ function Player(options) {
 
   this.touched = function() {
     if (!this.is_touched) {
+      if (document.getElementById('sound').checked)
+        new Audio('snd/au.wav').play();
       this.lives--;
       this.is_touched = 60;
     }
   }
 
   this.eat = function() {
+    this.lives++;
+    if (document.getElementById('sound').checked)
+      new Audio('snd/nom.wav').play();
     if (!this.is_eating) {
       this.is_eating = 30;
     }
