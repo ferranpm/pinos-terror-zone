@@ -1,20 +1,18 @@
-function Outro() {
-    var background;
+class Outro {
+  setup() {
+    this.background = document.createElement('img');
+    this.background.src = 'img/background_outro.png';
+    jaws.on_keyup('enter', this.toMenu);
+  }
 
-    this.toMenu = function() {
-        jaws.switchGameState(Menu);
-    }
+  toMenu() {
+    jaws.switchGameState(Menu);
+  }
 
-    this.setup = function() {
-        background = document.createElement('img');
-        background.src = 'img/background_outro.png';
-        jaws.on_keyup('enter', this.toMenu);
-    }
+  update() {
+  }
 
-    this.update = function() {
-    }
-
-    this.draw = function() {
-        jaws.context.drawImage(background, 0, 0);
-    }
+  draw() {
+    jaws.context.drawImage(this.background, 0, 0);
+  }
 }

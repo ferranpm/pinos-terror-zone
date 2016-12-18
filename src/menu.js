@@ -1,47 +1,41 @@
-function Menu() {
-    var background; 
-    var anim;
-    var jugar;
-    var count;
-    var frames = 30;
-    var pos;
+class Menu {
+  setup() {
+    this.frames = 30;
+    this.background = document.createElement('img');
+    this.background.src = 'img/background_menu.png';
 
-    this.randomButtonPos = function() {
-        var x = Math.round(Math.random()*(jaws.canvas.width - 205));
-        var y = Math.round(Math.random()*(jaws.canvas.height - 80));
-        return [x, y];
+    this.jugar = document.createElement('img');
+    this.jugar.src = 'img/jugar1.png';
+
+    this.pos = this.randomButtonPos();
+    this.count = 0;
+
+    jaws.on_keyup('enter', this.toGame);
+  }
+
+  randomButtonPos() {
+    var x = Math.round(Math.random()*(jaws.canvas.width - 205));
+    var y = Math.round(Math.random()*(jaws.canvas.height - 80));
+    return [x, y];
+  }
+
+  toGame() {
+    jaws.switchGameState(Game);
+  }
+
+  update() {
+    this.count++;
+    if (this.count > this.frames) {
+      this.jugar.src = 'img/jugar1.png';
+      this.pos = this.randomButtonPos();
+      this.count = 0;
     }
+    if (this.count > this.frames/2) 
+      this.jugar.src = 'img/jugar2.png';
+  }
 
-    this.toGame = function() {
-        jaws.switchGameState(Game);
-    }
-
-    this.setup = function() {
-        background = document.createElement('img');
-        background.src = 'img/background_menu.png';
-
-        jugar = document.createElement('img');
-        jugar.src = 'img/jugar1.png';
-
-        pos = this.randomButtonPos();
-        count = 0;
-
-        jaws.on_keyup('enter', this.toGame);
-    }
-
-    this.update = function() {
-        count++;
-        if (count > frames) {
-            jugar.src = 'img/jugar1.png';
-            pos = this.randomButtonPos();
-            count = 0;
-        }
-        if (count > frames/2) 
-            jugar.src = 'img/jugar2.png';
-    }
-
-    this.draw = function() {
-        jaws.context.drawImage(background, 0, 0);
-        jaws.context.drawImage(jugar, pos[0], pos[1]);
-    }
+  draw() {
+    jaws.context.drawImage(this.background, 0, 0);
+    jaws.context.drawImage(this.jugar, this.pos[0], this.pos[1]);
+  }
 }
