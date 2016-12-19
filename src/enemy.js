@@ -1,11 +1,11 @@
 class Enemy extends jaws.Sprite {
   constructor(pos) {
-
-    function randomImage() {
-      return Enemy.images[Math.round(Math.random()*100)%3];
-    }
-
-    super({image: randomImage(), x: pos[0], y: pos[1]});
+    const image = Assets.game.enemies[Math.round(Math.random()*100)%Assets.game.enemies.length];
+    super({
+      image: image,
+      x: pos.x,
+      y: pos.y
+    });
     this.vel = 2;
   }
 
@@ -23,9 +23,3 @@ class Enemy extends jaws.Sprite {
       player.touched();
   }
 }
-
-Enemy.images = [
-  'img/cage.png',
-  'img/frances.png',
-  'img/steam.png'
-];

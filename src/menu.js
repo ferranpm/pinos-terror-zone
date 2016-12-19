@@ -1,41 +1,36 @@
 class Menu {
   setup() {
     this.frames = 30;
-    this.background = document.createElement('img');
-    this.background.src = 'img/background_menu.png';
+    this.background = Assets.menu.background;
 
-    this.jugar = document.createElement('img');
-    this.jugar.src = 'img/jugar1.png';
+    this.jugar = Assets.menu.button[0];
 
-    this.pos = this.randomButtonPos();
     this.count = 0;
+    this.pos = { x: 0, y: 0 };
 
-    jaws.on_keyup('enter', this.toGame);
+    jaws.on_keyup('enter', jaws.switchGameState.bind(null, Game));
   }
 
   randomButtonPos() {
-    var x = Math.round(Math.random()*(jaws.canvas.width - 205));
-    var y = Math.round(Math.random()*(jaws.canvas.height - 80));
-    return [x, y];
-  }
-
-  toGame() {
-    jaws.switchGameState(Game);
+    return {
+      x: Math.round(Math.random()*(jaws.canvas.width - this.jugar.width)),
+      y: Math.round(Math.random()*(jaws.canvas.height - this.jugar.height))
+    };
   }
 
   update() {
-    this.count++;
-    if (this.count > this.frames) {
-      this.jugar.src = 'img/jugar1.png';
-      this.pos = this.randomButtonPos();
+    if (this.count === 0) {
       this.count = 0;
+      this.jugar = Assets.menu.button[0];
+      this.pos = this.randomButtonPos();
     }
-    if (this.count > this.frames/2) 
-      this.jugar.src = 'img/jugar2.png';
+    if (this.count === this.frames/2) 
+      this.jugar = Assets.menu.button[1];
+    this.count = (this.count + 1)%this.frames;
   }
 
   draw() {
     jaws.context.drawImage(this.background, 0, 0);
-    jaws.context.drawImage(this.jugar, this.pos[0], this.pos[1]);
+    jaws.context.drawImage(this.jugar, this.pos.x, this.pos.y);
   }
 }

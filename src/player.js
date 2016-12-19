@@ -1,10 +1,10 @@
 class Player extends jaws.Sprite {
   constructor() {
-    super({image: 'img/pino.png', x: 500, y: 250});
-    this.images = [
-      'img/pino.png',
-      'img/pino_omg.png',
-      'img/pino_nom.png'];
+    super({
+      image: Assets.game.player.normal,
+      x: 500,
+      y: 250
+    });
     this.lives = 3;
     this.is_touched = 0;
     this.is_eating = 0;
@@ -33,14 +33,14 @@ class Player extends jaws.Sprite {
 
   update() {
     if (this.is_eating > 0) {
-      this.setImage(this.images[2]);
+      this.setImage(Assets.game.player.eating);
       this.is_eating--;
     }
     else if (this.is_touched > 0) {
-      this.setImage(this.images[1]);
+      this.setImage(Assets.game.player.touched);
       this.is_touched--;
     }
-    else this.setImage(this.images[0]);
+    else this.setImage(Assets.game.player.normal);
     if (jaws.pressed('w') && this.y > 0) this.move(0,-this.vel);
     if (jaws.pressed('s') && this.y < 600-80) this.move(0,this.vel);
     if (jaws.pressed('a') && this.x > 0) this.move(-this.vel,0);

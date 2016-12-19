@@ -1,7 +1,6 @@
 class Outro {
   setup() {
-    this.background = document.createElement('img');
-    this.background.src = 'img/background_outro.png';
+    this.background = Assets.outro.background;
     jaws.on_keyup('enter', this.toMenu);
   }
 

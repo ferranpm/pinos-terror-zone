@@ -1,36 +1,18 @@
-const drawItem = (item) => item.draw();
-
 class Game {
   setup() {
     this.player = new Player();
     this.enemies = [];
     this.bullets = new Bullets();
     this.ramens = [];
-    this.background = document.createElement('img');
+    this.background = Assets.game.background[0];
     this.lvl = 0;
-    this.updateStats();
-  }
-
-  randomPosition() {
-    let espai = 150;
-    let rx = Math.round(Math.random()*(jaws.canvas.width-64));
-    let ry = Math.round(Math.random()*(jaws.canvas.height-64));
-    let bound_x0 = this.player.x - espai;
-    let bound_x1 = this.player.x + 64 + espai;
-    let bound_y0 = this.player.y - espai;
-    let bound_y1 = this.player.y + 90 + espai;
-    if (rx < bound_x0) return [rx, ry];
-    else if (rx > bound_x1) return [rx, ry];
-    else {
-      if (ry < bound_y0) return [rx, ry];
-      else if (ry > bound_y1) return [rx, ry];
-    }
-    return this.randomPosition();
+    this.DOMlives = document.getElementById('lives');
+    this.DOMlevel = document.getElementById('level');
   }
 
   updateStats() {
-    document.getElementById('lives').innerHTML = this.player.lives;
-    document.getElementById('level').innerHTML = this.lvl;
+    this.DOMlives.innerHTML = this.player.lives;
+    this.DOMlevel.innerHTML = this.lvl;
   }
 
   update() {
@@ -38,32 +20,21 @@ class Game {
 
     if (this.enemies.length <= 0) {
       this.lvl++;
-      for (let i = 0; i < this.lvl; i++) {
-        let position = this.randomPosition();
-        this.enemies.push(new Enemy([position[0], position[1]]));
-      }
+      for (let i = 0; i < this.lvl; i++) this.enemies.push(new Enemy(randomPosition(this.player)));
       if (this.lvl%5 === 0) {
-        let position = this.randomPosition();
-        this.ramens.push(new jaws.Sprite({image: "img/ramen.png", x: position[0], y: position[1]}));
+        const pos = randomPosition(this.player);
+        this.ramens.push(new jaws.Sprite({image: Assets.game.ramen, x: pos.x, y: pos.y}));
       }
-      switch (this.lvl%5) {
-        case 0: this.background.src = 'img/pisa.png'; break;
-        case 1: this.background.src = 'img/eiffel.png'; break;
-        case 2: this.background.src = 'img/coliseo.png'; break;
-        case 3: this.background.src = 'img/canada.png'; break;
-        case 4: this.background.src = 'img/delacroix.png'; break;
-      }
+      this.background = Assets.game.background[this.lvl%Assets.game.background.length];
       return;
     }
 
     this.enemies.forEach(enemy => enemy.update(this.player, this.enemies));
 
-    let comida = jaws.collideOneWithMany(this.player, this.ramens);
-    for (let i = 0; i < comida.length; i++) {
+    jaws.collideOneWithMany(this.player, this.ramens, (player, ramen) => {
       this.player.eat();
-      let index = this.ramens.indexOf(comida[i]);
-      this.ramens.splice(index, 1);
-    }
+      this.ramens.splice(this.ramens.indexOf(ramen));
+    });
 
     this.bullets.update(this.player, this.enemies);
     this.player.update();
@@ -78,3 +49,23 @@ class Game {
     this.player.draw();
   }
 }
+
+function randomPosition(position) {
+    const espai = 150;
+    const pos = {
+      x: Math.round(Math.random()*(jaws.canvas.width-64)),
+      y: Math.round(Math.random()*(jaws.canvas.height-64)),
+      right: this.x + 1,
+      bottom: this.y + 1
+    };
+    const box = {
+      x: position.x - espai,
+      right: position.x + 64 + espai,
+      y: position.y - espai,
+      bottom: position.y + 90 + espai
+    };
+
+    if (!jaws.collideRects(pos, box)) return pos;
+    return randomPosition(position);
+  }
+
