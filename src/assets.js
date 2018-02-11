@@ -9,8 +9,7 @@ const Assets = {
 
   game: {
     bullet: createImage('./img/bullet.png'),
-    player: createImage('./img/pino.png'),
-    ramen: createImage('./img/ramen.png'),
+    life: createImage('./img/ramen.png'),
     enemies: [
       createImage('./img/cage.png'),
       createImage('./img/frances.png'),

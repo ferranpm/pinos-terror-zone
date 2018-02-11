@@ -3,7 +3,7 @@ class Game {
     this.player = new Player();
     this.enemies = [];
     this.bullets = new Bullets();
-    this.ramens = [];
+    this.lifes = [];
     this.background = Assets.game.background[0];
     this.lvl = 0;
     this.DOMlives = document.getElementById('lives');
@@ -23,7 +23,7 @@ class Game {
       for (let i = 0; i < this.lvl; i++) this.enemies.push(new Enemy(randomPosition(this.player)));
       if (this.lvl%5 === 0) {
         const pos = randomPosition(this.player);
-        this.ramens.push(new jaws.Sprite({image: Assets.game.ramen, x: pos.x, y: pos.y}));
+        this.lifes.push(new jaws.Sprite({image: Assets.game.life, x: pos.x, y: pos.y}));
       }
       this.background = Assets.game.background[this.lvl%Assets.game.background.length];
       return;
@@ -31,9 +31,9 @@ class Game {
 
     this.enemies.forEach(enemy => enemy.update(this.player, this.enemies));
 
-    jaws.collideOneWithMany(this.player, this.ramens, (player, ramen) => {
+    jaws.collideOneWithMany(this.player, this.lifes, (player, life) => {
       this.player.eat();
-      this.ramens.splice(this.ramens.indexOf(ramen));
+      this.lifes.splice(this.lifes.indexOf(life));
     });
 
     this.bullets.update(this.player, this.enemies);
@@ -45,7 +45,7 @@ class Game {
     jaws.context.drawImage(this.background, 0, 0);
     this.bullets.draw();
     this.enemies.forEach(drawItem);
-    this.ramens.forEach(drawItem);
+    this.lifes.forEach(drawItem);
     this.player.draw();
   }
 }
@@ -68,4 +68,3 @@ function randomPosition(position) {
     if (!jaws.collideRects(pos, box)) return pos;
     return randomPosition(position);
   }
-
