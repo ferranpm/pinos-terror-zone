@@ -3,7 +3,7 @@ import Enemy from './enemy.js';
 import Player from './player.js';
 import Bullets from './bullets.js';
 import Outro from './outro.js';
-import { drawItem } from './util.js';
+import { drawItem, randomPosition } from './util.js';
 
 export default class Game {
   setup() {
@@ -56,23 +56,3 @@ export default class Game {
     this.player.draw();
   }
 }
-
-function randomPosition(position) {
-    const espai = 150;
-    const x = Math.round(Math.random()*(jaws.canvas.width-64));
-    const y = Math.round(Math.random()*(jaws.canvas.height-64));
-    const pos = {
-      x, y,
-      right: x + 1,
-      bottom: y + 1
-    };
-    const box = {
-      x: position.x - espai,
-      right: position.x + 64 + espai,
-      y: position.y - espai,
-      bottom: position.y + 90 + espai
-    };
-
-    if (!jaws.collideRects(pos, box)) return pos;
-    return randomPosition(position);
-  }
