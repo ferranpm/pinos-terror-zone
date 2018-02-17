@@ -2,36 +2,36 @@ import { createImage } from './util.js';
 
 export default {
   menu: {
-    background: createImage('img/background_menu.png'),
+    background: createImage('assets/images/background_menu.png'),
     button: [
-      createImage('img/jugar1.png'),
-      createImage('img/jugar2.png'),
+      createImage('assets/images/jugar1.png'),
+      createImage('assets/images/jugar2.png'),
     ]
   },
 
   game: {
-    bullet: createImage('./img/bullet.png'),
-    life: createImage('./img/ramen.png'),
+    bullet: createImage('assets/images/bullet.png'),
+    life: createImage('assets/images/ramen.png'),
     enemies: [
-      createImage('./img/cage.png'),
-      createImage('./img/frances.png'),
-      createImage('./img/steam.png'),
+      createImage('assets/images/cage.png'),
+      createImage('assets/images/frances.png'),
+      createImage('assets/images/steam.png'),
     ],
     player: {
-      normal: createImage('./img/pino.png'),
-      touched: createImage('./img/pino_omg.png'),
-      eating: createImage('./img/pino_nom.png')
+      normal: createImage('assets/images/pino.png'),
+      touched: createImage('assets/images/pino_omg.png'),
+      eating: createImage('assets/images/pino_nom.png')
     },
     background: [
-      createImage('img/pisa.png'),
-      createImage('img/eiffel.png'),
-      createImage('img/coliseo.png'),
-      createImage('img/canada.png'),
-      createImage('img/delacroix.png'),
+      createImage('assets/images/pisa.png'),
+      createImage('assets/images/eiffel.png'),
+      createImage('assets/images/coliseo.png'),
+      createImage('assets/images/canada.png'),
+      createImage('assets/images/delacroix.png'),
     ],
   },
 
   outro: {
-    background: createImage('img/background_outro.png'),
+    background: createImage('assets/images/background_outro.png'),
   },
 };

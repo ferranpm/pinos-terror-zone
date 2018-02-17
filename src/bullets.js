@@ -40,6 +40,6 @@ export default class Bullets {
 
 function createBullet(pos, dir) {
   if (document.getElementById('sound').checked)
-    (new Audio('snd/shot.wav')).play();
+    (new Audio('assets/sounds/shot.wav')).play();
   return new Bullet({x: pos.x+15, y: pos.y+60}, dir);
 }
