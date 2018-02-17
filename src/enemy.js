@@ -1,4 +1,6 @@
-class Enemy extends jaws.Sprite {
+import Assets from './assets.js';
+
+export default class Enemy extends jaws.Sprite {
   constructor(pos) {
     const image = Assets.game.enemies[Math.round(Math.random()*100)%Assets.game.enemies.length];
     super({

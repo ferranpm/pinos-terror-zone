@@ -1,4 +1,6 @@
-class Bullet extends jaws.Sprite {
+import Assets from './assets.js';
+
+export default class Bullet extends jaws.Sprite {
   constructor(pos, dir) {
     super({image: Assets.game.bullet, x: pos.x, y: pos.y});
     const vel = 15;

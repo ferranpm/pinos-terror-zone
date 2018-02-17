@@ -1,4 +1,11 @@
-class Game {
+import Assets from './assets.js';
+import Enemy from './enemy.js';
+import Player from './player.js';
+import Bullets from './bullets.js';
+import Outro from './outro.js';
+import { drawItem } from './util.js';
+
+export default class Game {
   setup() {
     this.player = new Player();
     this.enemies = [];
@@ -52,11 +59,12 @@ class Game {
 
 function randomPosition(position) {
     const espai = 150;
+    const x = Math.round(Math.random()*(jaws.canvas.width-64));
+    const y = Math.round(Math.random()*(jaws.canvas.height-64));
     const pos = {
-      x: Math.round(Math.random()*(jaws.canvas.width-64)),
-      y: Math.round(Math.random()*(jaws.canvas.height-64)),
-      right: this.x + 1,
-      bottom: this.y + 1
+      x, y,
+      right: x + 1,
+      bottom: y + 1
     };
     const box = {
       x: position.x - espai,

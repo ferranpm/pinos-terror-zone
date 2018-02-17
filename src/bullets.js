@@ -1,4 +1,7 @@
-class Bullets {
+import Bullet from './bullet.js';
+import { outOfBounds } from './util.js';
+
+export default class Bullets {
   constructor() {
     this.pressed = {i: false, j: false, k: false, l: false}
     this.bullets = [];
@@ -40,4 +43,3 @@ function createBullet(pos, dir) {
     (new Audio('snd/shot.wav')).play();
   return new Bullet({x: pos.x+15, y: pos.y+60}, dir);
 }
-

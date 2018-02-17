@@ -1,9 +1,11 @@
-const Assets = {
+import { createImage } from './util.js';
+
+export default {
   menu: {
     background: createImage('img/background_menu.png'),
     button: [
       createImage('img/jugar1.png'),
-      createImage('img/jugar2.png')
+      createImage('img/jugar2.png'),
     ]
   },
 
@@ -13,7 +15,7 @@ const Assets = {
     enemies: [
       createImage('./img/cage.png'),
       createImage('./img/frances.png'),
-      createImage('./img/steam.png')
+      createImage('./img/steam.png'),
     ],
     player: {
       normal: createImage('./img/pino.png'),
@@ -25,11 +27,11 @@ const Assets = {
       createImage('img/eiffel.png'),
       createImage('img/coliseo.png'),
       createImage('img/canada.png'),
-      createImage('img/delacroix.png')
+      createImage('img/delacroix.png'),
     ],
   },
 
   outro: {
-    background: createImage('img/background_outro.png')
-  }
-}
+    background: createImage('img/background_outro.png'),
+  },
+};

@@ -1,0 +1,19 @@
+{
+  "name": "pinos-terror-zone",
+  "version": "1.0.0",
+  "description": "Binding of Isaac like simple game",
+  "repository": "git@github.com:ferranpm/pinos-terror-zone",
+  "author": "Ferran Pelayo Monfort <ferran.pel.mon@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack-dashboard -- webpack --watch",
+    "build": "NODE_ENV=production webpack"
+  },
+  "devDependencies": {
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "pixi.js": "^4.7.0",
+    "webpack": "^3.11.0",
+    "webpack-dashboard": "^1.1.1"
+  }
+}

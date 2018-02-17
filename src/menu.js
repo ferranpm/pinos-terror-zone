@@ -1,4 +1,7 @@
-class Menu {
+import Assets from './assets.js';
+import Game from './game.js'
+
+export default class Menu {
   setup() {
     this.frames = 30;
     this.background = Assets.menu.background;
@@ -24,7 +27,7 @@ class Menu {
       this.jugar = Assets.menu.button[0];
       this.pos = this.randomButtonPos();
     }
-    if (this.count === this.frames/2) 
+    if (this.count === this.frames/2)
       this.jugar = Assets.menu.button[1];
     this.count = (this.count + 1)%this.frames;
   }

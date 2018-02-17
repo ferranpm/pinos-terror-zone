@@ -1,4 +1,6 @@
-class Player extends jaws.Sprite {
+import Assets from './assets.js';
+
+export default class Player extends jaws.Sprite {
   constructor() {
     super({
       image: Assets.game.player.normal,
