@@ -12,13 +12,16 @@ export default class Player extends jaws.Sprite {
     this.is_eating = 0;
     this.state = 0;
     this.vel = 8;
-    this.auAudio = new Audio('assets/sounds/au.wav');
+    this.audio = {
+      au: new Audio('assets/sounds/au.wav'),
+      nom: new Audio('assets/sounds/nom.wav'),
+    };
   }
 
   touched() {
     if (!this.is_touched) {
       if (document.getElementById('sound').checked)
-        this.auAudio.play();
+        this.audio.au.play();
       this.lives--;
       this.is_touched = 60;
     }
@@ -27,7 +30,7 @@ export default class Player extends jaws.Sprite {
   eat() {
     this.lives++;
     if (document.getElementById('sound').checked)
-      (new Audio('assets/sounds/nom.wav')).play();
+      this.audio.nom.play();
     if (!this.is_eating) {
       this.is_eating = 30;
     }
