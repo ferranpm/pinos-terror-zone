@@ -1,5 +1,3 @@
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var DashboardPlugin = require('webpack-dashboard/plugin');
 var path = require('path');
 
 var development = process.env.NODE_ENV !== 'production';
@@ -26,8 +24,6 @@ module.exports = {
   },
 
   plugins: development ? [
-    new DashboardPlugin()
   ] : [
-    new UglifyJSPlugin({ sourceMap: true })
   ]
 };
