@@ -6,15 +6,10 @@
   "author": "Ferran Pelayo Monfort <ferran.pel.mon@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack --watch",
-    "build": "NODE_ENV=production webpack"
+    "dev": "esbuild src/main.js --bundle --sourcemap --platform=browser --watch --outfile=dist/game.min.js",
+    "build": "esbuild src/main.js --bundle --sourcemap --platform=browser --minify --outfile=dist/game.min.js"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
-    "pixi.js": "^4.7.0",
-    "webpack": "^5.3.2",
-    "webpack-cli": "^4.1.0"
+    "esbuild": "^0.17.2"
   }
 }
