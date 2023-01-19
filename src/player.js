@@ -1,3 +1,4 @@
+import jaws from './jaws.js';
 import Assets from './assets.js';
 
 export default class Player extends jaws.Sprite {

@@ -1,3 +1,4 @@
+import jaws from './jaws.js';
 import Bullet from './bullet.js';
 import { outOfBounds } from './util.js';
 

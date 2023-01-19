@@ -1,3 +1,4 @@
+import jaws from './jaws.js';
 import Assets from './assets.js';
 import Game from './game.js'
 
@@ -11,7 +12,7 @@ export default class Menu {
     this.count = 0;
     this.pos = { x: 0, y: 0 };
 
-    jaws.on_keyup('enter', jaws.switchGameState.bind(null, Game));
+    jaws.on_keyup('enter', () => jaws.switchGameState(Game));
   }
 
   randomButtonPos() {

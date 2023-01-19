@@ -1,3 +1,5 @@
+import jaws from './jaws.js';
+
 export function createImage(path) {
   const image = new Image();
   image.src = path;
@@ -19,13 +21,11 @@ export function randomPosition(position) {
   };
   const box = {
     x: position.x - espai,
-    right: position.x + 64 + espai,
+    width: 64 + espai,
     y: position.y - espai,
-    bottom: position.y + 90 + espai
+    height: 90 + espai
   };
 
-  if (!jaws.collideRects(pos, box)) return pos;
+  if (!jaws.collideOneWithOne(pos, box)) return pos;
   return randomPosition(position);
 }
-
-export const drawItem = item => item.draw();

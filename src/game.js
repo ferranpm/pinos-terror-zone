@@ -1,9 +1,10 @@
+import jaws from './jaws.js';
 import Assets from './assets.js';
 import Enemy from './enemy.js';
 import Player from './player.js';
 import Bullets from './bullets.js';
 import Outro from './outro.js';
-import { drawItem, randomPosition } from './util.js';
+import { randomPosition } from './util.js';
 
 export default class Game {
   setup() {
@@ -51,8 +52,8 @@ export default class Game {
   draw() {
     jaws.context.drawImage(this.background, 0, 0);
     this.bullets.draw();
-    this.enemies.forEach(drawItem);
-    this.lifes.forEach(drawItem);
+    this.enemies.forEach(enemy => enemy.draw());
+    this.lifes.forEach(life => life.draw());
     this.player.draw();
   }
 }

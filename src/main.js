@@ -1,3 +1,4 @@
+import jaws from './jaws.js';
 import Menu from './menu.js';
 
 jaws.preventDefaultKeys(['w', 'a', 's', 'd', 'i', 'j', 'k', 'l', 'enter']);
