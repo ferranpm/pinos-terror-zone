@@ -10,6 +10,6 @@
     "build": "esbuild src/main.js --bundle --sourcemap --platform=browser --minify --outfile=dist/game.min.js"
   },
   "devDependencies": {
-    "esbuild": "^0.17.2"
+    "esbuild": "^0.25.0"
   }
 }
